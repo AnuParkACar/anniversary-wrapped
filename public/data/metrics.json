@@ -1,0 +1,143 @@
+{
+    "meta": {
+        "partnerName": "Anna",
+        "years": 3,
+        "startDate": "2023-02-14",
+        "dataRange": {
+            "netflix": "February 2025 - February 2026",
+            "banking": "August 2025 - February 2026"
+        }
+    },
+    "quizShows": [
+        "Stranger Things",
+        "Breaking Bad",
+        "Dark",
+        "Big Mouth",
+        "Russian Doll"
+    ],
+    "metrics": [
+        {
+            "id": "netflix_hours",
+            "label": "Hours Watched Together",
+            "value": "190.5",
+            "unit": "hours of pure entertainment",
+            "icon": "📺"
+        },
+        {
+            "id": "netflix_sessions",
+            "label": "Netflix Sessions",
+            "value": "299",
+            "unit": "cozy viewing sessions",
+            "icon": "🎬"
+        },
+        {
+            "id": "favorite_show",
+            "label": "Most Binged Show",
+            "value": "Stranger Things",
+            "unit": "59 episodes together",
+            "icon": "👻"
+        },
+        {
+            "id": "longest_binge",
+            "label": "Epic Binge Session",
+            "value": "13 episodes",
+            "unit": "of Breaking Bad in one day",
+            "icon": "🏆"
+        },
+        {
+            "id": "biggest_netflix_day",
+            "label": "Biggest Netflix Day",
+            "value": "9.6 hours",
+            "unit": "on February 16, 2025",
+            "icon": "🛋️"
+        },
+        {
+            "id": "ubereats",
+            "label": "Uber Eats Orders",
+            "value": "47",
+            "unit": "late night cravings satisfied",
+            "icon": "🛵"
+        },
+        {
+            "id": "restaurant_visits",
+            "label": "Restaurant Date Nights",
+            "value": "42",
+            "unit": "delicious memories",
+            "icon": "🍽️"
+        },
+        {
+            "id": "favorite_restaurant",
+            "label": "Our Go-To Spot",
+            "value": "Tasty House",
+            "unit": "9 visits and counting",
+            "icon": "⭐"
+        },
+        {
+            "id": "hot_pot_dates",
+            "label": "Hot Pot Dates",
+            "value": "5",
+            "unit": "cozy hotpot nights",
+            "icon": "🍲"
+        },
+        {
+            "id": "movie_nights",
+            "label": "Movie Theater Dates",
+            "value": "3",
+            "unit": "big screen experiences",
+            "icon": "🎥"
+        },
+        {
+            "id": "board_game_nights",
+            "label": "Board Game Cafe Nights",
+            "value": "3",
+            "unit": "games played together",
+            "icon": "🎲"
+        },
+        {
+            "id": "weekend_dates",
+            "label": "Weekend Date Outings",
+            "value": "31",
+            "unit": "Fri-Sun adventures",
+            "icon": "💑"
+        }
+    ],
+    "topMoments": [
+        {
+            "id": 1,
+            "title": "PLACEHOLDER: Moment 1",
+            "description": "PLACEHOLDER: Description",
+            "photo": "photos/moment1.jpg",
+            "date": "YYYY-MM-DD"
+        },
+        {
+            "id": 2,
+            "title": "PLACEHOLDER: Moment 2",
+            "description": "PLACEHOLDER: Description",
+            "photo": "photos/moment2.jpg",
+            "date": "YYYY-MM-DD"
+        },
+        {
+            "id": 3,
+            "title": "PLACEHOLDER: Moment 3",
+            "description": "PLACEHOLDER: Description",
+            "photo": "photos/moment3.jpg",
+            "date": "YYYY-MM-DD"
+        }
+    ],
+    "photos": [
+        "photos/photo1.jpg",
+        "photos/photo2.jpg",
+        "photos/photo3.jpg"
+    ],
+    "funFacts": [
+        "Our peak Netflix time is Sundays at 2 AM - night owls unite! 🦉",
+        "We ordered Uber Eats 47 times - that's almost once a week! 🛵",
+        "Tasty House is officially our spot - 9 visits and counting! ⭐",
+        "Longest binge session: 13 episodes of Breaking Bad on Feb 16, 2025 - 9.6 hours! 🏆",
+        "We watched 66 different shows together - variety is the spice of life! 🎬",
+        "5 hot pot dates since July because nothing says love like sharing a boiling pot 🍲",
+        "Top 5 shows: Stranger Things, Breaking Bad, Dark, Big Mouth, Russian Doll 📺",
+        "31 weekend date outings - making the most of our Fri-Sun time together! 💑"
+    ],
+    "outroMessage": "PLACEHOLDER: Your heartfelt closing message 💛"
+}

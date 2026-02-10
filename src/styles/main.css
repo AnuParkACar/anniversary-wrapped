@@ -1,0 +1,768 @@
+/* ========================================
+   CSS Variables & Theme
+   ======================================== */
+:root {
+  /* Primary - Yellow (Girlfriend's favorite) */
+  --yellow-bright: #FFD700;
+  --yellow-soft: #FFF3B0;
+  --yellow-accent: #FFAA00;
+  --yellow-glow: rgba(255, 215, 0, 0.3);
+  --yellow-glow-strong: rgba(255, 215, 0, 0.5);
+
+  /* Background */
+  --bg-dark: #1A1A2E;
+  --bg-darker: #16213E;
+  --bg-gradient: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F0F23 100%);
+
+  /* Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E8E8E8;
+  --text-muted: #9A9AB0;
+
+  /* Romantic accents */
+  --pink-soft: #FFB6C1;
+  --rose: #FF6B6B;
+  --heart: #FF4D6D;
+
+  /* Quiz */
+  --correct: #4ADE80;
+  --wrong: #ef4444;
+
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+
+  /* Typography */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Transitions */
+  --transition-fast: 0.25s ease;
+  --transition-medium: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ========================================
+   Reset & Base
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  width: 100%;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ========================================
+   Slides Container & Layout
+   ======================================== */
+.slides-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform var(--transition-slow);
+  will-change: transform;
+}
+
+.slide {
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 420px;
+  width: 100%;
+  z-index: 2;
+}
+
+/* ========================================
+   Animate Target System
+   Each child with .animate-target starts hidden,
+   then animates in when .animated is added
+   ======================================== */
+.animate-target {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-target.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   Slide Exit Animations
+   ======================================== */
+.slide.exiting {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.slide.exit-forward {
+  opacity: 0;
+  transform: scale(0.92) translateX(-5%);
+}
+
+.slide.exit-backward {
+  opacity: 0;
+  transform: scale(0.92) translateX(5%);
+}
+
+/* ========================================
+   Background Decorations
+   ======================================== */
+.slide-bg-decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.metric-slide .slide-bg-decoration::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--yellow-glow) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* ========================================
+   Typography
+   ======================================== */
+.slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--yellow-bright) 0%, var(--yellow-accent) 50%, var(--yellow-soft) 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.slide-subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.slide-text {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 280px;
+  line-height: 1.7;
+}
+
+/* ========================================
+   Metric Display
+   ======================================== */
+.metric-icon {
+  font-size: 3.5rem;
+  margin-bottom: var(--spacing-md);
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.3));
+}
+
+.metric-value {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 18vw, 7rem);
+  font-weight: 800;
+  color: var(--yellow-bright);
+  text-shadow: 0 0 60px var(--yellow-glow-strong), 0 0 120px var(--yellow-glow);
+  line-height: 1;
+}
+
+.metric-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1rem, 4vw, 1.3rem);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-sm);
+  letter-spacing: 1px;
+}
+
+.metric-unit {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-top: var(--spacing-xs);
+  font-style: italic;
+}
+
+/* ========================================
+   Quiz Slide
+   ======================================== */
+.quiz-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.quiz-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+  margin-top: var(--spacing-md);
+}
+
+.quiz-tile {
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 215, 0, 0.2);
+  border-radius: 14px;
+  padding: 16px 20px;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.quiz-tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 215, 0, 0.08) 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.quiz-tile:hover::before {
+  opacity: 1;
+}
+
+.quiz-tile:hover {
+  border-color: var(--yellow-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255, 215, 0, 0.15);
+}
+
+.quiz-tile:active {
+  transform: scale(0.97);
+}
+
+.quiz-correct {
+  border-color: var(--correct) !important;
+  background: rgba(74, 222, 128, 0.15) !important;
+  animation: correct-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 30px rgba(74, 222, 128, 0.3) !important;
+}
+
+.quiz-wrong {
+  border-color: var(--wrong) !important;
+  background: rgba(239, 68, 68, 0.15) !important;
+  animation: wrong-shake 0.5s ease;
+}
+
+.quiz-reveal {
+  animation: reveal-pulse 0.6s ease 0.6s forwards;
+}
+
+.quiz-dimmed {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.quiz-result {
+  margin-top: var(--spacing-md);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.4s ease;
+}
+
+.quiz-result.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quiz-result.correct {
+  color: var(--correct);
+}
+
+.quiz-result.wrong {
+  color: var(--text-secondary);
+}
+
+@keyframes correct-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wrong-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(4px); }
+}
+
+/* Celebration Particles */
+.celebration-particle {
+  position: fixed;
+  font-size: 1.2rem;
+  pointer-events: none;
+  z-index: 1000;
+  animation: particle-burst 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes particle-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0.3) rotate(360deg);
+  }
+}
+
+/* ========================================
+   Fun Facts Slide
+   ======================================== */
+.fun-facts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 350px;
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--yellow-accent) transparent;
+}
+
+.fun-fact-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid var(--yellow-bright);
+  border-radius: 0 12px 12px 0;
+  padding: 14px 16px;
+  text-align: left;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.fun-fact-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(4px);
+}
+
+.fun-fact-text {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ========================================
+   Top Moments Cards
+   ======================================== */
+.moments-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: 350px;
+}
+
+.moment-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  backdrop-filter: blur(4px);
+}
+
+.moment-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 40px var(--yellow-glow);
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.moment-card-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.moment-thumbnail {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid var(--yellow-bright);
+}
+
+.moment-info {
+  flex: 1;
+  text-align: left;
+}
+
+.moment-number {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: var(--yellow-bright);
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.moment-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.moment-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.click-me {
+  position: absolute;
+  top: -10px;
+  right: -6px;
+  background: var(--yellow-bright);
+  color: var(--bg-dark);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  animation: click-me-pulse 2s ease-in-out infinite;
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4);
+  z-index: 3;
+}
+
+@keyframes click-me-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4); }
+  50% { transform: scale(1.08); box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6); }
+}
+
+/* ========================================
+   Modal
+   ======================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: linear-gradient(145deg, #1e2040, #16213E);
+  border-radius: 20px;
+  padding: var(--spacing-lg);
+  max-width: 380px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: scale(0.85) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(255, 215, 0, 0.15);
+  position: relative;
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1) translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-image {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: var(--spacing-md);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--yellow-bright);
+  margin-bottom: var(--spacing-sm);
+}
+
+.modal-description {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+/* ========================================
+   Photo Montage
+   ======================================== */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  width: 100%;
+  max-width: 330px;
+}
+
+.photo-item {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.photo-item:hover img {
+  transform: scale(1.12);
+}
+
+/* ========================================
+   Music Toggle
+   ======================================== */
+.music-toggle {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-md);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.music-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.music-toggle.muted {
+  opacity: 0.4;
+}
+
+.music-icon {
+  font-size: 1.3rem;
+}
+
+/* ========================================
+   Navigation Dots
+   ======================================== */
+.nav-dots {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 50;
+}
+
+.nav-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-dot.active {
+  background: var(--yellow-bright);
+  transform: scale(1.5);
+  box-shadow: 0 0 8px var(--yellow-glow);
+}
+
+/* ========================================
+   Intro Slide
+   ======================================== */
+.intro-hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.floating-heart {
+  position: absolute;
+  opacity: 0.25;
+  animation: float-drift 6s ease-in-out infinite;
+}
+
+@keyframes float-drift {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.25; }
+  50% { transform: translateY(-25px) rotate(8deg); opacity: 0.4; }
+}
+
+.tap-hint {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: var(--spacing-xl);
+  letter-spacing: 1px;
+}
+
+/* ========================================
+   Outro Slide
+   ======================================== */
+.outro-message {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 5vw, 2rem);
+  font-weight: 600;
+  line-height: 1.5;
+  max-width: 300px;
+  color: var(--text-secondary);
+}
+
+.outro-heart {
+  font-size: 4rem;
+  margin-top: var(--spacing-lg);
+  animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+}
+
+.year-badge {
+  background: linear-gradient(135deg, var(--yellow-bright), var(--yellow-accent));
+  color: var(--bg-dark);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: 50px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-top: var(--spacing-lg);
+  box-shadow: 0 4px 24px var(--yellow-glow);
+}
+
+/* ========================================
+   Utility Animations
+   ======================================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Scrollbar for fun facts */
+.fun-facts-list::-webkit-scrollbar {
+  width: 4px;
+}
+.fun-facts-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.fun-facts-list::-webkit-scrollbar-thumb {
+  background: var(--yellow-accent);
+  border-radius: 4px;
+}
