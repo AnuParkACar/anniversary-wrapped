@@ -532,34 +532,58 @@ function setupAudio() {
   const audio = document.getElementById('background-music');
   const toggle = document.getElementById('music-toggle');
 
+  // Update UI helper
+  const updateUI = (isPlaying) => {
+    if (isPlaying) {
+      toggle.classList.remove('muted');
+      toggle.querySelector('.music-icon').textContent = '🎵';
+    } else {
+      toggle.classList.add('muted');
+      toggle.querySelector('.music-icon').textContent = '🔇';
+    }
+  };
+
+  // Toggle handler
   toggle.onclick = (e) => {
     e.stopPropagation();
     if (musicPlaying) {
       audio.pause();
-      toggle.classList.add('muted');
-      toggle.querySelector('.music-icon').textContent = '🔇';
+      musicPlaying = false;
+      updateUI(false);
     } else {
-      audio.play().catch(() => { });
-      toggle.classList.remove('muted');
-      toggle.querySelector('.music-icon').textContent = '🎵';
-    }
-    musicPlaying = !musicPlaying;
-  };
-
-  // Auto-play on first interaction
-  const startAudio = () => {
-    if (!musicPlaying) {
       audio.play().then(() => {
         musicPlaying = true;
-        toggle.classList.remove('muted');
-        toggle.querySelector('.music-icon').textContent = '🎵';
-      }).catch(() => { });
+        updateUI(true);
+      }).catch(e => console.log('Audio play failed:', e));
     }
-    document.removeEventListener('click', startAudio);
-    document.removeEventListener('touchend', startAudio);
   };
-  document.addEventListener('click', startAudio, { once: true });
-  document.addEventListener('touchend', startAudio, { once: true });
+
+  // Attempt autoplay immediately
+  audio.play().then(() => {
+    musicPlaying = true;
+    updateUI(true);
+    console.log('✅ Autoplay success');
+  }).catch(() => {
+    console.log('⚠️ Autoplay blocked - waiting for interaction');
+    musicPlaying = false;
+    updateUI(false);
+
+    // Fallback: Play on first interaction
+    const startAudio = () => {
+      audio.play().then(() => {
+        musicPlaying = true;
+        updateUI(true);
+        // Remove listeners once successful
+        document.removeEventListener('click', startAudio);
+        document.removeEventListener('touchstart', startAudio);
+        document.removeEventListener('keydown', startAudio);
+      }).catch(() => { });
+    };
+
+    document.addEventListener('click', startAudio, { once: true });
+    document.addEventListener('touchstart', startAudio, { once: true });
+    document.addEventListener('keydown', startAudio, { once: true });
+  });
 }
 
 // ============================================
