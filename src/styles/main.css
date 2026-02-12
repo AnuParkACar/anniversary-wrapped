@@ -48,7 +48,9 @@
 /* ========================================
    Reset & Base
    ======================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -80,22 +82,414 @@ body {
    Slides Container & Layout
    ======================================== */
 .slides-container {
-  display: flex;
+  position: relative;
   width: 100%;
   height: 100%;
-  transition: transform var(--transition-slow);
-  will-change: transform;
+  overflow: hidden;
 }
 
 .slide {
-  min-width: 100%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
   overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+/* ========================================
+   Per-Slide Color Themes & CSS Patterns
+   Bright, bubbly, romantic palettes
+   (Inspired by css-pattern.com)
+   ======================================== */
+
+/* -- Intro: Dreamy violet-pink gradient with sparkle dots -- */
+.intro-slide {
+  --slide-accent: #FFD700;
+  --slide-accent-alt: #FFF3B0;
+  background: linear-gradient(135deg, #7B2FF7 0%, #C471F5 40%, #F64F8E 100%);
+}
+
+.intro-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background: radial-gradient(circle, #fff 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Netflix Hours: Bold crimson-coral -- */
+.slide[data-slide="metric-netflix_hours"] {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #FFE0E6;
+  background: linear-gradient(160deg, #E63946 0%, #FF6B6B 50%, #FF8FA3 100%);
+}
+
+.slide[data-slide="metric-netflix_hours"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    radial-gradient(ellipse 28px 28px at 28px 28px, rgba(255, 255, 255, 0.25) 50%, transparent 50%),
+    radial-gradient(ellipse 28px 28px at 0 0, rgba(255, 255, 255, 0.25) 50%, transparent 50%);
+  background-size: 56px 56px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Netflix Sessions: Electric violet -- */
+.slide[data-slide="metric-netflix_sessions"] {
+  --slide-accent: #E0FBFC;
+  --slide-accent-alt: #B8F3FF;
+  background: linear-gradient(170deg, #8338EC 0%, #A855F7 50%, #C084FC 100%);
+}
+
+.slide[data-slide="metric-netflix_sessions"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.15) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.15) 75%);
+  background-size: 36px 36px;
+  background-position: 0 0, 0 18px, 18px -18px, -18px 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Longest Binge: Vivid ocean blue -- */
+.slide[data-slide="metric-longest_binge"] {
+  --slide-accent: #FFF176;
+  --slide-accent-alt: #FFEE58;
+  background: linear-gradient(140deg, #1A73E8 0%, #4FC3F7 50%, #81D4FA 100%);
+}
+
+.slide[data-slide="metric-longest_binge"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%) -18px 0,
+    linear-gradient(225deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%) -18px 0,
+    linear-gradient(315deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%);
+  background-size: 36px 36px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Biggest Netflix Day: Bright magenta-fuchsia -- */
+.slide[data-slide="metric-biggest_netflix_day"] {
+  --slide-accent: #FFF9C4;
+  --slide-accent-alt: #FFFDE7;
+  background: linear-gradient(155deg, #D946EF 0%, #E879F9 50%, #F0ABFC 100%);
+}
+
+.slide[data-slide="metric-biggest_netflix_day"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    conic-gradient(from 45deg, transparent 25%, rgba(255, 255, 255, 0.12) 25% 50%, transparent 50% 75%, rgba(255, 255, 255, 0.12) 75%);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Quiz: Bright teal-turquoise -- */
+.quiz-slide {
+  --slide-accent: #FFD54F;
+  --slide-accent-alt: #FFE082;
+  background: linear-gradient(165deg, #0D9488 0%, #14B8A6 50%, #5EEAD4 100%);
+}
+
+.quiz-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    radial-gradient(circle 12px at 12px 12px, rgba(255, 255, 255, 0.2) 97%, transparent 97%),
+    radial-gradient(circle 12px at 0 0, rgba(255, 255, 255, 0.2) 97%, transparent 97%);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Uber Eats: Warm coral-peach -- */
+.slide[data-slide="metric-uber_eats_orders"] {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #FFF3E0;
+  background: linear-gradient(145deg, #FF6F61 0%, #FF8A65 50%, #FFAB91 100%);
+}
+
+.slide[data-slide="metric-uber_eats_orders"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 22px, rgba(255, 255, 255, 0.15) 22px, rgba(255, 255, 255, 0.15) 23px),
+    repeating-linear-gradient(90deg, transparent, transparent 22px, rgba(255, 255, 255, 0.15) 22px, rgba(255, 255, 255, 0.15) 23px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Restaurant Dates: Hot pink-magenta -- */
+.slide[data-slide="metric-restaurant_dates"] {
+  --slide-accent: #E0F7FA;
+  --slide-accent-alt: #B2EBF2;
+  background: linear-gradient(130deg, #EC4899 0%, #F472B6 50%, #F9A8D4 100%);
+}
+
+.slide[data-slide="metric-restaurant_dates"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 2px, transparent 2px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Go-to Restaurant: Bright emerald -- */
+.slide[data-slide="metric-go_to_restaurant"] {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #FFE0B2;
+  background: linear-gradient(160deg, #059669 0%, #34D399 50%, #6EE7B7 100%);
+}
+
+.slide[data-slide="metric-go_to_restaurant"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    linear-gradient(60deg, rgba(255, 255, 255, 0.12) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.12) 75%),
+    linear-gradient(60deg, rgba(255, 255, 255, 0.12) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.12) 75%);
+  background-size: 44px 76px;
+  background-position: 0 0, 22px 38px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Hot Pot: Vibrant tangerine-orange -- */
+.slide[data-slide="metric-hot_pot_dates"] {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #FFF3E0;
+  background: linear-gradient(145deg, #F97316 0%, #FB923C 50%, #FDBA74 100%);
+}
+
+.slide[data-slide="metric-hot_pot_dates"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background: radial-gradient(circle 7px, rgba(255, 255, 255, 0.2) 100%, transparent 100%);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Movie Theater: Electric indigo-blue -- */
+.slide[data-slide="metric-movie_theater_dates"] {
+  --slide-accent: #FFD700;
+  --slide-accent-alt: #FFF176;
+  background: linear-gradient(150deg, #4338CA 0%, #6366F1 50%, #818CF8 100%);
+}
+
+.slide[data-slide="metric-movie_theater_dates"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 18px 18px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Board Game Nights: Bright golden-amber -- */
+.slide[data-slide="metric-board_game_nights"] {
+  --slide-accent: #1A237E;
+  --slide-accent-alt: #283593;
+  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 50%, #FDE68A 100%);
+}
+
+.slide[data-slide="metric-board_game_nights"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.15) 10%, transparent 10%, transparent 90%, rgba(255, 255, 255, 0.15) 90%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 10%, transparent 10%, transparent 90%, rgba(255, 255, 255, 0.15) 90%);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Weekend Dates: Sky blue-cyan -- */
+.slide[data-slide="metric-weekend_dates"] {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #FFF9C4;
+  background: linear-gradient(160deg, #0891B2 0%, #22D3EE 50%, #67E8F9 100%);
+}
+
+.slide[data-slide="metric-weekend_dates"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%) -16px 0,
+    linear-gradient(225deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%) -16px 0,
+    linear-gradient(315deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Fun Facts: Sunny yellow-gold -- */
+.fun-facts-slide {
+  --slide-accent: #4A148C;
+  --slide-accent-alt: #6A1B9A;
+  background: linear-gradient(155deg, #EAB308 0%, #FACC15 50%, #FDE047 100%);
+}
+
+.fun-facts-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255, 255, 255, 0.15) 8px, rgba(255, 255, 255, 0.15) 9px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Top Moments: Romantic rose-pink -- */
+.moments-slide {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #FFF9C4;
+  background: linear-gradient(145deg, #E11D48 0%, #FB7185 50%, #FDA4AF 100%);
+}
+
+.moments-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
+  background-size: 26px 26px;
+  background-position: 0 0, 13px 13px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Photo Montage: Lavender-periwinkle -- */
+.montage-slide {
+  --slide-accent: #FFD700;
+  --slide-accent-alt: #FFF176;
+  background: linear-gradient(140deg, #7C3AED 0%, #A78BFA 50%, #C4B5FD 100%);
+}
+
+.montage-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Outro: Deep romantic magenta -- */
+.outro-slide {
+  --slide-accent: #FFD700;
+  --slide-accent-alt: #FFF3B0;
+  background: linear-gradient(135deg, #BE185D 0%, #EC4899 50%, #F9A8D4 100%);
+}
+
+.outro-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background:
+    radial-gradient(ellipse 14px 20px at 14px 10px, rgba(255, 255, 255, 0.2) 50%, transparent 50%),
+    radial-gradient(ellipse 14px 20px at 0 10px, rgba(255, 255, 255, 0.2) 50%, transparent 50%);
+  background-size: 28px 28px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========================================
+   Per-Slide Text Color Overrides
+   ======================================== */
+
+/* Use --slide-accent for titles and values per slide */
+.slide .slide-title {
+  background: linear-gradient(135deg, var(--slide-accent, #FFD700) 0%, var(--slide-accent-alt, #FFF3B0) 100%);
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slide .metric-value {
+  color: var(--slide-accent, #FFD700);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2), 0 0 40px rgba(255, 255, 255, 0.15);
+}
+
+.slide .metric-label {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.slide .metric-unit {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.slide .slide-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Generic fallback metric slide (for any data-slide not listed above) */
+.metric-slide {
+  --slide-accent: #FFD700;
+  --slide-accent-alt: #FFF3B0;
+  background: linear-gradient(150deg, #6D28D9 0%, #8B5CF6 50%, #A78BFA 100%);
 }
 
 .slide-content {
@@ -119,7 +513,7 @@ body {
   opacity: 0;
   transform: translateY(25px);
   transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-target.animated {
@@ -128,10 +522,10 @@ body {
 }
 
 /* ========================================
-   Slide Exit Animations
+   Slide Exit Animations (multi-directional)
    ======================================== */
 .slide.exiting {
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .slide.exit-forward {
@@ -142,6 +536,16 @@ body {
 .slide.exit-backward {
   opacity: 0;
   transform: scale(0.92) translateX(5%);
+}
+
+.slide.exit-up {
+  opacity: 0;
+  transform: scale(0.92) translateY(-8%);
+}
+
+.slide.exit-down {
+  opacity: 0;
+  transform: scale(0.92) translateY(8%);
 }
 
 /* ========================================
@@ -167,8 +571,17 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
 }
 
 /* ========================================
@@ -180,17 +593,18 @@ body {
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: var(--spacing-md);
-  background: linear-gradient(135deg, var(--yellow-bright) 0%, var(--yellow-accent) 50%, var(--yellow-soft) 100%);
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 @keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .slide-subtitle {
@@ -221,8 +635,6 @@ body {
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 18vw, 7rem);
   font-weight: 800;
-  color: var(--yellow-bright);
-  text-shadow: 0 0 60px var(--yellow-glow-strong), 0 0 120px var(--yellow-glow);
   line-height: 1;
 }
 
@@ -343,17 +755,41 @@ body {
 }
 
 @keyframes correct-pop {
-  0% { transform: scale(1); }
-  40% { transform: scale(1.08); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes wrong-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8px); }
-  40% { transform: translateX(8px); }
-  60% { transform: translateX(-6px); }
-  80% { transform: translateX(4px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-8px);
+  }
+
+  40% {
+    transform: translateX(8px);
+  }
+
+  60% {
+    transform: translateX(-6px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
 }
 
 /* Celebration Particles */
@@ -370,6 +806,7 @@ body {
     opacity: 1;
     transform: translate(0, 0) scale(1) rotate(0deg);
   }
+
   100% {
     opacity: 0;
     transform: translate(var(--tx), var(--ty)) scale(0.3) rotate(360deg);
@@ -498,8 +935,17 @@ body {
 }
 
 @keyframes click-me-pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4); }
-  50% { transform: scale(1.08); box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6); }
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4);
+  }
+
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6);
+  }
 }
 
 /* ========================================
@@ -694,8 +1140,17 @@ body {
 }
 
 @keyframes float-drift {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.25; }
-  50% { transform: translateY(-25px) rotate(8deg); opacity: 0.4; }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.25;
+  }
+
+  50% {
+    transform: translateY(-25px) rotate(8deg);
+    opacity: 0.4;
+  }
 }
 
 .tap-hint {
@@ -724,10 +1179,23 @@ body {
 }
 
 @keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  15% { transform: scale(1.15); }
-  30% { transform: scale(1); }
-  45% { transform: scale(1.1); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  15% {
+    transform: scale(1.15);
+  }
+
+  30% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.1);
+  }
 }
 
 .year-badge {
@@ -746,22 +1214,36 @@ body {
    Utility Animations
    ======================================== */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 /* Scrollbar for fun facts */
 .fun-facts-list::-webkit-scrollbar {
   width: 4px;
 }
+
 .fun-facts-list::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .fun-facts-list::-webkit-scrollbar-thumb {
   background: var(--yellow-accent);
   border-radius: 4px;

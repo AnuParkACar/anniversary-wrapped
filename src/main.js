@@ -13,14 +13,27 @@ let musicPlaying = false;
 let appData = null;
 let quizAnswered = false;
 
-// Transition types for variety
-const transitions = [
-  'fade-scale',     // Fade + scale up
-  'slide-up',       // Slide from bottom
-  'rotate-in',      // Subtle rotation entrance
-  'zoom-blur',      // Zoom in with blur clearing
-  'split-reveal',   // Reveal from center
-  'flip-in',        // 3D flip
+// Transition directions for variety
+const slideDirections = [
+  'right',   // slide 0→1
+  'up',      // slide 1→2
+  'right',   // slide 2→3
+  'down',    // slide 3→4
+  'left',    // slide 4→5
+  'up',      // slide 5→6
+  'right',   // slide 6→7
+  'up',      // slide 7→8
+  'down',    // slide 8→9
+  'left',    // slide 9→10
+  'up',      // slide 10→11
+  'right',   // slide 11→12
+  'down',    // slide 12→13
+  'up',      // slide 13→14
+  'right',   // slide 14→15
+  'up',      // slide 15→16
+  'right',   // slide 16→17
+  'down',    // slide 17→18
+  'left',    // slide 18→19 (extra)
 ];
 
 // Sample/fallback data
@@ -44,13 +57,21 @@ const sampleData = {
 // Slide Templates
 // ============================================
 
-function getTransition(index) {
-  return transitions[index % transitions.length];
+function getDirection(fromIndex, toIndex) {
+  // Use the preset direction for the transition between these slides
+  const idx = Math.min(fromIndex, toIndex);
+  const baseDir = slideDirections[idx % slideDirections.length];
+  // If going backward, reverse the direction
+  if (toIndex < fromIndex) {
+    const reverseMap = { right: 'left', left: 'right', up: 'down', down: 'up' };
+    return reverseMap[baseDir] || baseDir;
+  }
+  return baseDir;
 }
 
 function createIntroSlide(data) {
   return `
-    <div class="slide intro-slide" data-slide="intro" data-transition="fade-scale">
+    <div class="slide intro-slide" data-slide="intro">
       <div class="intro-hearts">${createFloatingHearts()}</div>
       <div class="slide-content">
         <div class="slide-title animate-target">Our Year Together</div>
@@ -66,7 +87,7 @@ function createIntroSlide(data) {
 
 function createMetricSlide(metric, index) {
   return `
-    <div class="slide metric-slide" data-slide="metric-${metric.id}" data-transition="${getTransition(index)}">
+    <div class="slide metric-slide" data-slide="metric-${metric.id}">
       <div class="slide-content">
         <div class="metric-icon animate-target">${metric.icon}</div>
         <div class="metric-value animate-target" data-value="${metric.value}">${metric.value}</div>
@@ -95,7 +116,7 @@ function createQuizSlide(data) {
   `).join('');
 
   return `
-    <div class="slide quiz-slide" data-slide="quiz" data-transition="zoom-blur" data-interactive="true">
+    <div class="slide quiz-slide" data-slide="quiz" data-interactive="true">
       <div class="slide-content">
         <div class="quiz-icon animate-target">🤔</div>
         <div class="slide-subtitle animate-target">Can you guess...</div>
@@ -119,7 +140,7 @@ function createFunFactsSlide(funFacts) {
   `).join('');
 
   return `
-    <div class="slide fun-facts-slide" data-slide="fun-facts" data-transition="slide-up">
+    <div class="slide fun-facts-slide" data-slide="fun-facts">
       <div class="slide-content">
         <div class="slide-subtitle animate-target">Did You Know? 💡</div>
         <div class="fun-facts-list">
@@ -147,7 +168,7 @@ function createTopMomentsSlide(moments) {
   `).join('');
 
   return `
-    <div class="slide moments-slide" data-slide="moments" data-transition="split-reveal">
+    <div class="slide moments-slide" data-slide="moments">
       <div class="slide-content">
         <div class="slide-subtitle animate-target">Our Top 3 Moments 💫</div>
         <div class="moments-grid">
@@ -168,7 +189,7 @@ function createPhotoMontageSlide(photos) {
   `).join('');
 
   return `
-    <div class="slide montage-slide" data-slide="montage" data-transition="flip-in">
+    <div class="slide montage-slide" data-slide="montage">
       <div class="slide-content">
         <div class="slide-subtitle animate-target">Our Memories 📸</div>
         <div class="photo-grid">
@@ -181,7 +202,7 @@ function createPhotoMontageSlide(photos) {
 
 function createOutroSlide(data) {
   return `
-    <div class="slide outro-slide" data-slide="outro" data-transition="fade-scale">
+    <div class="slide outro-slide" data-slide="outro">
       <div class="intro-hearts">${createFloatingHearts()}</div>
       <div class="slide-content">
         <div class="outro-message animate-target">${data.outroMessage}</div>
@@ -257,7 +278,7 @@ function animateCounter(element) {
 // Quiz Functions
 // ============================================
 
-window.handleQuizAnswer = function(button, selected, correct) {
+window.handleQuizAnswer = function (button, selected, correct) {
   if (quizAnswered) return;
   quizAnswered = true;
 
@@ -324,7 +345,7 @@ function createCelebration(element) {
 // Modal Functions
 // ============================================
 
-window.openMomentModal = function(momentId) {
+window.openMomentModal = function (momentId) {
   const data = appData || sampleData;
   const moment = data.topMoments.find(m => m.id === momentId);
   if (!moment) return;
@@ -354,7 +375,7 @@ window.openMomentModal = function(momentId) {
   setTimeout(() => modal.classList.add('active'), 10);
 };
 
-window.closeMomentModal = function() {
+window.closeMomentModal = function () {
   const modal = document.getElementById('moment-modal');
   if (modal) modal.classList.remove('active');
 };
@@ -367,53 +388,79 @@ function goToSlide(index) {
   if (isTransitioning || index === currentSlide) return;
   if (index < 0 || index >= slides.length) return;
 
-  const direction = index > currentSlide ? 'forward' : 'backward';
   isTransitioning = true;
 
   const oldSlide = slides[currentSlide];
   const newSlide = slides[index];
-  const transition = newSlide.dataset.transition || 'fade-scale';
+  const direction = getDirection(currentSlide, index);
 
-  // Exit animation for old slide
-  oldSlide.classList.remove('active');
-  oldSlide.classList.add('exiting', `exit-${direction}`);
+  // Determine exit and enter transforms based on direction
+  const exitTransforms = {
+    right: 'translateX(-100%)',
+    left: 'translateX(100%)',
+    up: 'translateY(-100%)',
+    down: 'translateY(100%)',
+  };
+  const enterFromTransforms = {
+    right: 'translateX(100%)',
+    left: 'translateX(-100%)',
+    up: 'translateY(100%)',
+    down: 'translateY(-100%)',
+  };
 
-  // Remove inner animations for re-triggering
+  // Remove animated classes from new slide's targets for re-triggering
   newSlide.querySelectorAll('.animate-target').forEach(el => {
     el.classList.remove('animated');
   });
 
-  // Small delay for exit, then enter
+  // Position new slide at the enter-from position
+  newSlide.style.transition = 'none';
+  newSlide.style.transform = enterFromTransforms[direction];
+  newSlide.style.opacity = '1';
+  newSlide.classList.add('active');
+
+  // Force reflow so the position is applied before animating
+  newSlide.offsetHeight;
+
+  // Animate both slides
+  const duration = '0.65s';
+  const easing = 'cubic-bezier(0.4, 0, 0.2, 1)';
+
+  oldSlide.style.transition = `transform ${duration} ${easing}, opacity ${duration} ${easing}`;
+  oldSlide.style.transform = exitTransforms[direction];
+  oldSlide.style.opacity = '0';
+
+  newSlide.style.transition = `transform ${duration} ${easing}, opacity ${duration} ${easing}`;
+  newSlide.style.transform = 'translate(0, 0)';
+  newSlide.style.opacity = '1';
+
+  currentSlide = index;
+
+  // Trigger entry animations with stagger
+  const targets = newSlide.querySelectorAll('.animate-target');
+  targets.forEach((el, i) => {
+    setTimeout(() => {
+      el.classList.add('animated');
+    }, 200 + i * 120);
+  });
+
+  // Counter animations for metric slides
+  const counter = newSlide.querySelector('.metric-value[data-value]');
+  if (counter) {
+    setTimeout(() => animateCounter(counter), 400);
+  }
+
+  updateNavDots();
+
+  // Clean up after transition
   setTimeout(() => {
-    oldSlide.classList.remove('exiting', `exit-${direction}`);
-
-    // Move container
-    const container = document.querySelector('.slides-container');
-    container.style.transform = `translateX(-${index * 100}%)`;
-
-    currentSlide = index;
-    newSlide.classList.add('active');
-
-    // Trigger entry animations with stagger
-    const targets = newSlide.querySelectorAll('.animate-target');
-    targets.forEach((el, i) => {
-      setTimeout(() => {
-        el.classList.add('animated');
-      }, i * 120);
-    });
-
-    // Counter animations for metric slides
-    const counter = newSlide.querySelector('.metric-value[data-value]');
-    if (counter) {
-      setTimeout(() => animateCounter(counter), 300);
-    }
-
-    updateNavDots();
-  }, 250);
-
-  setTimeout(() => {
+    oldSlide.classList.remove('active');
+    oldSlide.style.transition = '';
+    oldSlide.style.transform = '';
+    oldSlide.style.opacity = '';
+    newSlide.style.transition = '';
     isTransitioning = false;
-  }, 800);
+  }, 700);
 }
 
 function nextSlide() {
@@ -492,7 +539,7 @@ function setupAudio() {
       toggle.classList.add('muted');
       toggle.querySelector('.music-icon').textContent = '🔇';
     } else {
-      audio.play().catch(() => {});
+      audio.play().catch(() => { });
       toggle.classList.remove('muted');
       toggle.querySelector('.music-icon').textContent = '🎵';
     }
@@ -506,7 +553,7 @@ function setupAudio() {
         musicPlaying = true;
         toggle.classList.remove('muted');
         toggle.querySelector('.music-icon').textContent = '🎵';
-      }).catch(() => {});
+      }).catch(() => { });
     }
     document.removeEventListener('click', startAudio);
     document.removeEventListener('touchend', startAudio);
