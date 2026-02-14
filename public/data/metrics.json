@@ -82,14 +82,14 @@
         {
             "id": "movie_nights",
             "label": "Movie Theater Dates",
-            "value": "3",
+            "value": "6",
             "unit": "big screen experiences",
             "icon": "🎥"
         },
         {
             "id": "board_game_nights",
             "label": "Board Game Cafe Nights",
-            "value": "3",
+            "value": "6",
             "unit": "games played together",
             "icon": "🎲"
         },
@@ -99,15 +99,22 @@
             "value": "31",
             "unit": "Fri-Sun adventures",
             "icon": "💑"
+        },
+        {
+            "id": "most_ordered_item",
+            "label": "Most Ordered Item",
+            "value": "Matcha",
+            "unit": "our signature order 🍵",
+            "icon": "🍵"
         }
     ],
     "topMoments": [
         {
             "id": 1,
-            "title": "PLACEHOLDER: Moment 1",
-            "description": "PLACEHOLDER: Description",
-            "photo": "photos/moment1.jpg",
-            "date": "YYYY-MM-DD"
+            "title": "Calgary Trip",
+            "description": "placeholder",
+            "photo": "photos/calgary_trip.jpg",
+            "date": "2025-06-14"
         },
         {
             "id": 2,
@@ -139,5 +146,12 @@
         "Top 5 shows: Stranger Things, Breaking Bad, Dark, Big Mouth, Russian Doll 📺",
         "31 weekend date outings - making the most of our Fri-Sun time together! 💑"
     ],
-    "outroMessage": "PLACEHOLDER: Your heartfelt closing message 💛"
+    "outroMessage": "PLACEHOLDER: Your heartfelt closing message 💛",
+    "top_5_restaurants": [
+        "Tasty House (True Boss)",
+        "Chipotle",
+        "Chilli Hot Pot",
+        "Tim Hortons",
+        "Osmow's Shawarma"
+    ]
 }

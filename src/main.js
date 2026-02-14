@@ -77,7 +77,7 @@ function createIntroSlide(data) {
         <div class="slide-title animate-target">Our Year Together</div>
         <div class="slide-subtitle animate-target">Year ${data.meta.years} 💛</div>
         <div class="slide-text animate-target">
-          A journey through our favorite moments, memories, and the little things that make us... us.
+          A journey through our favorite moments, memories, and my favorite things about us.
         </div>
         <div class="tap-hint animate-target">Tap anywhere to begin →</div>
       </div>
@@ -151,17 +151,66 @@ function createFunFactsSlide(funFacts) {
   `;
 }
 
+function createTop5RestaurantsSlide(restaurants) {
+  if (!restaurants || restaurants.length === 0) return '';
+  const medals = ['🥇', '🥈', '🥉', '4.', '5.'];
+  const items = restaurants.map((name, i) => `
+    <div class="restaurant-item animate-target" style="animation-delay: ${0.15 * i}s">
+      <span class="restaurant-rank">${medals[i]}</span>
+      <span class="restaurant-name">${name}</span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="slide restaurants-slide" data-slide="restaurants">
+      <div class="slide-content">
+        <div class="metric-icon animate-target">🍽️</div>
+        <div class="slide-subtitle animate-target">Our Top 5 Restaurants</div>
+        <div class="restaurant-list">
+          ${items}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function createWordleSlide(data) {
+  return `
+    <div class="slide wordle-slide" data-slide="wordle" data-interactive="true">
+      <div class="slide-content wordle-content">
+        <div class="slide-subtitle animate-target">🍵 Can you guess it?</div>
+        <div class="slide-title animate-target" style="font-size: clamp(1.3rem, 5vw, 2rem);">Our Most Ordered Item</div>
+        <div class="wordle-iframe-wrapper animate-target">
+          <iframe
+            src="https://vue-wordle.netlify.app/?bWF0Y2hh"
+            class="wordle-iframe"
+            title="Wordle - Guess our most ordered item"
+            allow="clipboard-write"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function createTopMomentsSlide(moments) {
+  const rotations = [-4, 3, -2];
   const cards = moments.map((moment, i) => `
-    <div class="moment-card animate-target" data-moment-id="${moment.id}" onclick="openMomentModal(${moment.id})">
-      <span class="click-me">💛 Click me!</span>
-      <div class="moment-card-inner">
+    <div class="moment-card animate-target" data-moment-id="${moment.id}" style="--rotation: ${rotations[i]}deg" onclick="toggleMomentExpand(this, ${moment.id})">
+      <div class="polaroid-frame">
         <img src="${moment.photo}" alt="${moment.title}" class="moment-thumbnail"
              onerror="this.style.display='none'">
-        <div class="moment-info">
+        <div class="polaroid-caption">
           <div class="moment-number">#${i + 1}</div>
           <div class="moment-title">${moment.title}</div>
           <div class="moment-date">${formatDate(moment.date)}</div>
+        </div>
+      </div>
+      <div class="moment-expanded-content">
+        <div class="expanded-text">
+          <div class="expanded-title">${moment.title}</div>
+          <div class="expanded-date">${formatDate(moment.date)}</div>
+          <div class="expanded-description">${moment.description}</div>
         </div>
       </div>
     </div>
@@ -169,10 +218,15 @@ function createTopMomentsSlide(moments) {
 
   return `
     <div class="slide moments-slide" data-slide="moments">
-      <div class="slide-content">
+      <div class="slide-content moments-content">
         <div class="slide-subtitle animate-target">Our Top 3 Moments 💫</div>
-        <div class="moments-grid">
-          ${cards}
+        <div class="moments-wrapper">
+          <div class="click-hint-container animate-target">
+            <span class="click-hint-text">← tap a photo! →</span>
+          </div>
+          <div class="moments-grid">
+            ${cards}
+          </div>
         </div>
       </div>
     </div>
@@ -345,40 +399,25 @@ function createCelebration(element) {
 // Modal Functions
 // ============================================
 
-window.openMomentModal = function (momentId) {
-  const data = appData || sampleData;
-  const moment = data.topMoments.find(m => m.id === momentId);
-  if (!moment) return;
+window.toggleMomentExpand = function (cardEl, momentId) {
+  const allCards = document.querySelectorAll('.moment-card');
+  const isExpanded = cardEl.classList.contains('expanded');
 
-  let modal = document.getElementById('moment-modal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'moment-modal';
-    modal.className = 'modal-overlay';
-    modal.onclick = (e) => {
-      if (e.target === modal) closeMomentModal();
-    };
-    document.body.appendChild(modal);
+  // Collapse all first
+  allCards.forEach(c => c.classList.remove('expanded'));
+
+  // Toggle this one
+  if (!isExpanded) {
+    cardEl.classList.add('expanded');
   }
-
-  modal.innerHTML = `
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeMomentModal()">×</button>
-      <img src="${moment.photo}" alt="${moment.title}" class="modal-image"
-           onerror="this.style.display='none'">
-      <div class="modal-title">${moment.title}</div>
-      <div class="moment-date" style="margin-bottom: 1rem; color: var(--text-muted);">${formatDate(moment.date)}</div>
-      <div class="modal-description">${moment.description}</div>
-    </div>
-  `;
-
-  setTimeout(() => modal.classList.add('active'), 10);
 };
 
-window.closeMomentModal = function () {
-  const modal = document.getElementById('moment-modal');
-  if (modal) modal.classList.remove('active');
-};
+// Close expanded card on click outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.moment-card') && !e.target.closest('.moments-grid')) {
+    document.querySelectorAll('.moment-card.expanded').forEach(c => c.classList.remove('expanded'));
+  }
+});
 
 // ============================================
 // Navigation with Creative Transitions
@@ -636,9 +675,9 @@ async function init() {
   // 1. Intro
   slidesHTML += createIntroSlide(data);
 
-  // 2. Separate metrics that are not "favorite_show" (quiz handles that)
-  const quizMetricIds = ['favorite_show'];
-  const regularMetrics = data.metrics.filter(m => !quizMetricIds.includes(m.id));
+  // 2. Separate special metrics
+  const specialMetricIds = ['favorite_show', 'favorite_restaurant', 'most_ordered_item'];
+  const regularMetrics = data.metrics.filter(m => !specialMetricIds.includes(m.id));
   const hasQuizData = data.metrics.find(m => m.id === 'favorite_show');
 
   // 3. First batch of metrics (Netflix stats)
@@ -659,20 +698,28 @@ async function init() {
     slidesHTML += createMetricSlide(metric, batch1.length + i);
   });
 
-  // 6. Fun Facts
+  // 6. Top 5 Restaurants leaderboard
+  if (data.top_5_restaurants && data.top_5_restaurants.length > 0) {
+    slidesHTML += createTop5RestaurantsSlide(data.top_5_restaurants);
+  }
+
+  // 7. Wordle slide (most ordered item)
+  slidesHTML += createWordleSlide(data);
+
+  // 8. Fun Facts
   if (data.funFacts && data.funFacts.length > 0) {
     slidesHTML += createFunFactsSlide(data.funFacts);
   }
 
-  // 7. Top Moments
+  // 9. Top Moments
   slidesHTML += createTopMomentsSlide(data.topMoments);
 
-  // 8. Photo Montage
+  // 10. Photo Montage
   if (data.photos && data.photos.length > 0) {
     slidesHTML += createPhotoMontageSlide(data.photos);
   }
 
-  // 9. Outro
+  // 11. Outro
   slidesHTML += createOutroSlide(data);
 
   // Inject slides
@@ -699,7 +746,7 @@ async function init() {
 
   // Click to advance (not on interactive elements)
   app.addEventListener('click', (e) => {
-    if (e.target.closest('.moment-card, .modal-overlay, .music-toggle, .nav-dot, .quiz-tile, .fun-fact-card')) return;
+    if (e.target.closest('.moment-card, .modal-overlay, .music-toggle, .nav-dot, .quiz-tile, .fun-fact-card, .wordle-iframe-wrapper')) return;
     nextSlide();
   });
 

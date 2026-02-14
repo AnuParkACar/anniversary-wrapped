@@ -454,6 +454,45 @@ body {
   z-index: 0;
 }
 
+/* -- Restaurants: Bright emerald leaderboard -- */
+.restaurants-slide {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #FFE0B2;
+  background: linear-gradient(155deg, #059669 0%, #10B981 50%, #6EE7B7 100%);
+}
+
+.restaurants-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    linear-gradient(60deg, rgba(255, 255, 255, 0.12) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.12) 75%),
+    linear-gradient(60deg, rgba(255, 255, 255, 0.12) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.12) 75%);
+  background-size: 44px 76px;
+  background-position: 0 0, 22px 38px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* -- Wordle: Matcha green -- */
+.wordle-slide {
+  --slide-accent: #FFFFFF;
+  --slide-accent-alt: #D4EDDA;
+  background: linear-gradient(145deg, #2D6A4F 0%, #40916C 50%, #74C69D 100%);
+}
+
+.wordle-slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 2px, transparent 2px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* ========================================
    Per-Slide Text Color Overrides
    ======================================== */
@@ -617,7 +656,7 @@ body {
 
 .slide-text {
   font-size: 1rem;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.85);
   max-width: 280px;
   line-height: 1.7;
 }
@@ -751,7 +790,7 @@ body {
 }
 
 .quiz-result.wrong {
-  color: var(--text-secondary);
+  color: #FF6B6B;
 }
 
 @keyframes correct-pop {
@@ -850,57 +889,164 @@ body {
 }
 
 /* ========================================
-   Top Moments Cards
+   Top 5 Restaurants
    ======================================== */
+.restaurant-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 340px;
+  margin-top: var(--spacing-md);
+}
+
+.restaurant-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px 18px;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.restaurant-item:hover {
+  transform: translateX(6px);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.restaurant-rank {
+  font-size: 1.5rem;
+  min-width: 2rem;
+  text-align: center;
+}
+
+.restaurant-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ========================================
+   Wordle Slide
+   ======================================== */
+.wordle-content {
+  max-width: 500px;
+  padding: var(--spacing-sm) var(--spacing-sm);
+}
+
+.wordle-iframe-wrapper {
+  width: 100%;
+  max-width: 400px;
+  margin-top: var(--spacing-sm);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #121213;
+}
+
+.wordle-iframe {
+  width: 100%;
+  height: 520px;
+  border: none;
+  display: block;
+}
+
+/* ========================================
+   Top Moments - Polaroid Cards
+   ======================================== */
+.moments-content {
+  max-width: 500px;
+  padding: var(--spacing-sm);
+}
+
+.moments-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.click-hint-container {
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.click-hint-text {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
 .moments-grid {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--spacing-md);
   width: 100%;
-  max-width: 350px;
 }
 
 .moment-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: var(--spacing-sm);
   cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
-  border: 1px solid rgba(255, 215, 0, 0.15);
-  backdrop-filter: blur(4px);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  transform: rotate(var(--rotation, 0deg));
+  width: 80%;
+  max-width: 280px;
+}
+
+/* Stagger positions */
+.moment-card:nth-child(1) {
+  align-self: flex-start;
+  margin-left: 5%;
+}
+
+.moment-card:nth-child(2) {
+  align-self: flex-end;
+  margin-right: 5%;
+}
+
+.moment-card:nth-child(3) {
+  align-self: center;
 }
 
 .moment-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 40px var(--yellow-glow);
-  border-color: rgba(255, 215, 0, 0.4);
+  transform: rotate(0deg) scale(1.04);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  z-index: 5;
 }
 
-.moment-card-inner {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+/* Polaroid frame */
+.polaroid-frame {
+  background: #fff;
+  padding: 10px 10px 0 10px;
+  border-radius: 4px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .moment-thumbnail {
-  width: 70px;
-  height: 70px;
-  border-radius: 12px;
+  width: 100%;
+  aspect-ratio: 4/3;
   object-fit: cover;
-  border: 2px solid var(--yellow-bright);
+  display: block;
+  border-radius: 2px;
 }
 
-.moment-info {
-  flex: 1;
-  text-align: left;
+.polaroid-caption {
+  padding: 10px 4px 14px;
+  text-align: center;
 }
 
 .moment-number {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.75rem;
-  color: var(--yellow-bright);
+  font-size: 0.7rem;
+  color: #E11D48;
   letter-spacing: 1px;
   margin-bottom: 2px;
 }
@@ -908,44 +1054,66 @@ body {
 .moment-title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--text-primary);
-  margin-bottom: 4px;
+  font-size: 0.9rem;
+  color: #333;
 }
 
 .moment-date {
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 2px;
 }
 
-.click-me {
-  position: absolute;
-  top: -10px;
-  right: -6px;
-  background: var(--yellow-bright);
-  color: var(--bg-dark);
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.72rem;
+/* Expanded content - hidden by default */
+.moment-expanded-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+}
+
+.moment-card.expanded {
+  transform: rotate(0deg) scale(1.02);
+  width: 95%;
+  max-width: 420px;
+  align-self: center !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  z-index: 10;
+}
+
+.moment-card.expanded .moment-expanded-content {
+  max-height: 200px;
+  padding: 0 10px 12px;
+}
+
+.moment-card.expanded .polaroid-frame {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+.expanded-text {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.expanded-title {
+  font-family: var(--font-display);
   font-weight: 700;
-  animation: click-me-pulse 2s ease-in-out infinite;
-  white-space: nowrap;
-  box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4);
-  z-index: 3;
+  font-size: 1rem;
+  color: #E11D48;
+  margin-bottom: 4px;
 }
 
-@keyframes click-me-pulse {
+.expanded-date {
+  font-size: 0.8rem;
+  color: #999;
+  margin-bottom: 8px;
+}
 
-  0%,
-  100% {
-    transform: scale(1);
-    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.4);
-  }
-
-  50% {
-    transform: scale(1.08);
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6);
-  }
+.expanded-description {
+  font-size: 0.88rem;
+  color: #444;
+  line-height: 1.6;
 }
 
 /* ========================================
@@ -1154,7 +1322,7 @@ body {
 }
 
 .tap-hint {
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.85rem;
   margin-top: var(--spacing-xl);
   letter-spacing: 1px;
