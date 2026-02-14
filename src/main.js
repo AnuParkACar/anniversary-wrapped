@@ -11,7 +11,7 @@ let slides = [];
 let isTransitioning = false;
 let musicPlaying = false;
 let appData = null;
-let quizAnswered = false;
+// Per-slide completion tracked via data-completed attribute
 
 // Transition directions for variety
 const slideDirections = [
@@ -74,8 +74,8 @@ function createIntroSlide(data) {
     <div class="slide intro-slide" data-slide="intro">
       <div class="intro-hearts">${createFloatingHearts()}</div>
       <div class="slide-content">
-        <div class="slide-title animate-target">Our Year Together</div>
-        <div class="slide-subtitle animate-target">Year ${data.meta.years} 💛</div>
+        <div class="slide-title animate-target">Happy Anniversary ${data.meta.partnerName}!</div>
+        <div class="slide-subtitle animate-target">Celebrating ${data.meta.years} years of us 💛</div>
         <div class="slide-text animate-target">
           A journey through our favorite moments, memories, and my favorite things about us.
         </div>
@@ -134,15 +134,17 @@ function createFunFactsSlide(funFacts) {
   if (!funFacts || funFacts.length === 0) return '';
 
   const factCards = funFacts.map((fact, i) => `
-    <div class="fun-fact-card animate-target" style="animation-delay: ${0.1 * i}s">
+    <div class="fun-fact-card animate-target" style="animation-delay: ${0.12 * i}s" onclick="scratchFunFact(this)">
       <span class="fun-fact-text">${fact}</span>
+      <div class="scratch-overlay">💡 Tap to reveal</div>
     </div>
   `).join('');
 
   return `
-    <div class="slide fun-facts-slide" data-slide="fun-facts">
+    <div class="slide fun-facts-slide" data-slide="fun-facts" data-interactive="true">
       <div class="slide-content">
         <div class="slide-subtitle animate-target">Did You Know? 💡</div>
+        <div class="fun-facts-hint animate-target">Scratch each card to reveal!</div>
         <div class="fun-facts-list">
           ${factCards}
         </div>
@@ -151,40 +153,125 @@ function createFunFactsSlide(funFacts) {
   `;
 }
 
+window._funFactsRevealed = 0;
+window._funFactsTotal = 0;
+
+window.scratchFunFact = function (el) {
+  if (el.classList.contains('scratched')) return;
+  el.classList.add('scratched');
+  window._funFactsRevealed++;
+  // Mark slide completed when all facts revealed
+  if (window._funFactsRevealed >= window._funFactsTotal) {
+    const slide = el.closest('.slide');
+    if (slide) slide.dataset.completed = 'true';
+  }
+};
+
 function createTop5RestaurantsSlide(restaurants) {
   if (!restaurants || restaurants.length === 0) return '';
-  const medals = ['🥇', '🥈', '🥉', '4.', '5.'];
-  const items = restaurants.map((name, i) => `
-    <div class="restaurant-item animate-target" style="animation-delay: ${0.15 * i}s">
-      <span class="restaurant-rank">${medals[i]}</span>
-      <span class="restaurant-name">${name}</span>
+
+  // Shuffle a copy for display (Fisher-Yates)
+  const shuffled = restaurants.map((name, i) => ({ name, correctRank: i }));
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  const items = shuffled.map((item, i) => `
+    <div class="restaurant-item animate-target" data-correct-rank="${item.correctRank}" style="animation-delay: ${0.1 * i}s" onclick="handleRestaurantGuess(this)">
+      <span class="guess-badge"></span>
+      <span class="restaurant-name">${item.name}</span>
     </div>
   `).join('');
 
   return `
-    <div class="slide restaurants-slide" data-slide="restaurants">
+    <div class="slide restaurants-slide" data-slide="restaurants" data-interactive="true">
       <div class="slide-content">
         <div class="metric-icon animate-target">🍽️</div>
-        <div class="slide-subtitle animate-target">Our Top 5 Restaurants</div>
-        <div class="restaurant-list">
+        <div class="slide-subtitle animate-target">Rank Our Top 5 Restaurants!</div>
+        <div class="restaurant-hint animate-target">Tap them in order — #1 first!</div>
+        <div class="restaurant-list" id="restaurant-game-list">
           ${items}
         </div>
+        <div class="restaurant-score" id="restaurant-score"></div>
       </div>
     </div>
   `;
 }
 
+// Track restaurant guesses
+window._restaurantGuesses = [];
+
+window.handleRestaurantGuess = function (el) {
+  // Ignore if already selected or game is done
+  if (el.classList.contains('selected') || window._restaurantGuesses.length >= 5) return;
+
+  window._restaurantGuesses.push(el);
+  const guessNumber = window._restaurantGuesses.length;
+  el.classList.add('selected');
+  el.querySelector('.guess-badge').textContent = guessNumber;
+
+  if (guessNumber === 5) {
+    // All picked — reveal results after a short pause
+    setTimeout(() => revealRestaurantResults(), 600);
+    // Mark slide as completed so user can advance after reveal
+    const slide = el.closest('.slide');
+    if (slide) slide.dataset.completed = 'true';
+  }
+};
+
+window.revealRestaurantResults = function () {
+  const medals = ['🥇', '🥈', '🥉', '4.', '5.'];
+  let correctCount = 0;
+
+  // Step 1: Mark correct/wrong immediately
+  window._restaurantGuesses.forEach((el, guessIndex) => {
+    const correctRank = parseInt(el.getAttribute('data-correct-rank'));
+    const isCorrect = guessIndex === correctRank;
+    if (isCorrect) correctCount++;
+    el.classList.add(isCorrect ? 'correct' : 'wrong');
+    el.querySelector('.guess-badge').textContent = medals[correctRank];
+  });
+
+  // Step 2: After a pause, physically reorder DOM elements with animation
+  setTimeout(() => {
+    const list = document.getElementById('restaurant-game-list');
+    const items = Array.from(list.querySelectorAll('.restaurant-item'));
+    items.sort((a, b) => parseInt(a.getAttribute('data-correct-rank')) - parseInt(b.getAttribute('data-correct-rank')));
+
+    // Add exit animation first
+    items.forEach(item => item.classList.add('reordering'));
+
+    setTimeout(() => {
+      // Physically reorder by re-appending in correct order
+      items.forEach((item, i) => {
+        item.style.transitionDelay = `${i * 0.15}s`;
+        item.classList.add('revealing');
+        list.appendChild(item);
+      });
+
+      // Step 3: Show score after reorder animation completes
+      setTimeout(() => {
+        const scoreEl = document.getElementById('restaurant-score');
+        const emoji = correctCount === 5 ? '🎉' : correctCount >= 3 ? '👏' : '😅';
+        scoreEl.textContent = `${emoji} ${correctCount}/5 correct!`;
+        scoreEl.classList.add('visible');
+      }, items.length * 150 + 400);
+    }, 300);
+  }, 800);
+};
+
 function createWordleSlide(data) {
   return `
-    <div class="slide wordle-slide" data-slide="wordle" data-interactive="true">
+    <div class="slide wordle-slide" data-slide="wordle" data-interactive="true" data-completed="true">
       <div class="slide-content wordle-content">
-        <div class="slide-subtitle animate-target">🍵 Can you guess it?</div>
-        <div class="slide-title animate-target" style="font-size: clamp(1.3rem, 5vw, 2rem);">Our Most Ordered Item</div>
+        <div class="slide-subtitle animate-target">Wordle Time! Can you guess the word?</div>
+        <div class="slide-title animate-target" style="font-size: clamp(1.3rem, 5vw, 2rem);">Hint: our first date!</div>
         <div class="wordle-iframe-wrapper animate-target">
           <iframe
-            src="https://vue-wordle.netlify.app/?bWF0Y2hh"
+            src="https://vue-wordle.netlify.app/?c3VzaGk="
             class="wordle-iframe"
-            title="Wordle - Guess our most ordered item"
+            title="Wordle - Guess The Word"
             allow="clipboard-write"
           ></iframe>
         </div>
@@ -208,8 +295,6 @@ function createTopMomentsSlide(moments) {
       </div>
       <div class="moment-expanded-content">
         <div class="expanded-text">
-          <div class="expanded-title">${moment.title}</div>
-          <div class="expanded-date">${formatDate(moment.date)}</div>
           <div class="expanded-description">${moment.description}</div>
         </div>
       </div>
@@ -235,23 +320,92 @@ function createTopMomentsSlide(moments) {
 
 function createPhotoMontageSlide(photos) {
   if (!photos || photos.length === 0) return '';
-  const photoItems = photos.map((photo, i) => `
-    <div class="photo-item animate-target" style="animation-delay: ${0.05 * i}s">
-      <img src="${photo}" alt="Memory ${i + 1}"
-           onerror="this.parentElement.style.display='none'">
+
+  const rotations = [-2.5, 1.8, -1.2, 2.5, -1.8, 1.5, -2, 1.2, -1.5, 2, -2.2, 1.8];
+
+  const cards = photos.map((photo, i) => `
+    <div class="montage-card animate-target" data-montage-id="${photo.id}" style="--rotation: ${rotations[i % rotations.length]}deg">
+      <div class="polaroid-frame">
+        <img src="${photo.photo}" alt="${photo.caption || 'Memory ' + photo.id}" class="montage-thumbnail"
+             onerror="this.style.display='none'">
+        <div class="polaroid-caption">
+          <div class="montage-caption">${photo.caption || ''}</div>
+        </div>
+      </div>
     </div>
   `).join('');
 
   return `
     <div class="slide montage-slide" data-slide="montage">
-      <div class="slide-content">
+      <div class="slide-content moments-content">
         <div class="slide-subtitle animate-target">Our Memories 📸</div>
-        <div class="photo-grid">
-          ${photoItems}
+        <div class="montage-wrapper">
+          <div class="montage-grid">
+            ${cards}
+          </div>
         </div>
       </div>
     </div>
   `;
+}
+
+// Auto-expand montage cards one by one when slide enters
+let montageAutoExpandTimer = null;
+
+function startMontageAutoExpand() {
+  // Clear any existing timer
+  if (montageAutoExpandTimer) {
+    clearTimeout(montageAutoExpandTimer);
+    montageAutoExpandTimer = null;
+  }
+
+  const cards = document.querySelectorAll('.montage-card');
+  if (cards.length === 0) return;
+
+  // Collapse all first
+  cards.forEach(c => c.classList.remove('expanded'));
+
+  let currentIndex = 0;
+  const expandDelay = 800; // delay before first expand
+  const expandDuration = 1500; // how long a card stays expanded
+  const gap = 300; // gap between collapse and next expand
+
+  function expandNext() {
+    if (currentIndex >= cards.length) return;
+
+    const card = cards[currentIndex];
+
+    // Scroll the card into view within the montage-wrapper
+    const wrapper = document.querySelector('.montage-wrapper');
+    if (wrapper && card) {
+      const cardTop = card.offsetTop - wrapper.offsetTop;
+      wrapper.scrollTo({ top: cardTop - 40, behavior: 'smooth' });
+    }
+
+    card.classList.add('expanded');
+
+    // Collapse after duration, then expand next
+    montageAutoExpandTimer = setTimeout(() => {
+      card.classList.remove('expanded');
+
+      currentIndex++;
+      if (currentIndex < cards.length) {
+        montageAutoExpandTimer = setTimeout(expandNext, gap);
+      }
+    }, expandDuration);
+  }
+
+  // Start after initial delay
+  montageAutoExpandTimer = setTimeout(expandNext, expandDelay);
+}
+
+function stopMontageAutoExpand() {
+  if (montageAutoExpandTimer) {
+    clearTimeout(montageAutoExpandTimer);
+    montageAutoExpandTimer = null;
+  }
+  // Collapse all montage cards
+  document.querySelectorAll('.montage-card.expanded').forEach(c => c.classList.remove('expanded'));
 }
 
 function createOutroSlide(data) {
@@ -333,8 +487,9 @@ function animateCounter(element) {
 // ============================================
 
 window.handleQuizAnswer = function (button, selected, correct) {
-  if (quizAnswered) return;
-  quizAnswered = true;
+  const quizSlide = button.closest('.slide');
+  if (quizSlide?.dataset.completed === 'true') return;
+  if (quizSlide) quizSlide.dataset.completed = 'true';
 
   const allTiles = document.querySelectorAll('.quiz-tile');
   const resultDiv = document.getElementById('quiz-result');
@@ -491,6 +646,16 @@ function goToSlide(index) {
 
   updateNavDots();
 
+  // Stop montage auto-expand when leaving montage slide
+  if (oldSlide.dataset.slide === 'montage') {
+    stopMontageAutoExpand();
+  }
+
+  // Start montage auto-expand when entering montage slide
+  if (newSlide.dataset.slide === 'montage') {
+    setTimeout(() => startMontageAutoExpand(), 800);
+  }
+
   // Clean up after transition
   setTimeout(() => {
     oldSlide.classList.remove('active');
@@ -503,9 +668,9 @@ function goToSlide(index) {
 }
 
 function nextSlide() {
-  // Don't advance past quiz if not answered
+  // Don't advance past interactive slides until completed
   const currentEl = slides[currentSlide];
-  if (currentEl?.dataset.interactive === 'true' && !quizAnswered) return;
+  if (currentEl?.dataset.interactive === 'true' && currentEl.dataset.completed !== 'true') return;
 
   if (currentSlide < slides.length - 1) {
     goToSlide(currentSlide + 1);
@@ -709,6 +874,7 @@ async function init() {
   // 8. Fun Facts
   if (data.funFacts && data.funFacts.length > 0) {
     slidesHTML += createFunFactsSlide(data.funFacts);
+    window._funFactsTotal = data.funFacts.length;
   }
 
   // 9. Top Moments
@@ -746,7 +912,7 @@ async function init() {
 
   // Click to advance (not on interactive elements)
   app.addEventListener('click', (e) => {
-    if (e.target.closest('.moment-card, .modal-overlay, .music-toggle, .nav-dot, .quiz-tile, .fun-fact-card, .wordle-iframe-wrapper')) return;
+    if (e.target.closest('.moment-card, .modal-overlay, .music-toggle, .nav-dot, .quiz-tile, .fun-fact-card, .wordle-iframe-wrapper, .restaurant-item, .scratch-overlay')) return;
     nextSlide();
   });
 
