@@ -35,63 +35,63 @@
             "id": "favorite_show",
             "label": "Most Binged Show",
             "value": "Stranger Things",
-            "unit": "59 episodes together",
+            "unit": "59 episodes together (YOU 🫵 ARE LIKE PAPA)",
             "icon": "👻"
         },
         {
             "id": "longest_binge",
             "label": "Epic Binge Session",
             "value": "13 episodes",
-            "unit": "of Breaking Bad in one day",
+            "unit": "of Breaking Bad in one day (YO MR WHITE LET'S BREAK BAD)",
             "icon": "🏆"
         },
         {
             "id": "biggest_netflix_day",
             "label": "Biggest Netflix Day",
             "value": "9.6 hours",
-            "unit": "on February 16, 2025",
+            "unit": "on February 16, 2025 (BED ROTTING CHAMPS 😤)",
             "icon": "🛋️"
         },
         {
             "id": "ubereats",
             "label": "Uber Eats Orders",
             "value": "47",
-            "unit": "late night cravings satisfied",
+            "unit": "late night cravings satisfied (CERTIFIED BIG BACKS FR)",
             "icon": "🛵"
         },
         {
             "id": "restaurant_visits",
             "label": "Restaurant Date Nights",
             "value": "42",
-            "unit": "delicious memories",
+            "unit": "delicious memories (OUR STOMACHS: 📈, OUR WALLETS: 📉)",
             "icon": "🍽️"
         },
         {
             "id": "favorite_restaurant",
             "label": "Our Go-To Spot",
             "value": "Tasty House",
-            "unit": "9 visits and counting",
+            "unit": "9 visits and counting (THE SPICY NOODLES THO 🌶️)",
             "icon": "⭐"
         },
         {
             "id": "hot_pot_dates",
             "label": "Hot Pot Dates",
             "value": "6",
-            "unit": "cozy hotpot nights",
+            "unit": "cozy hotpot nights (THE MANGO PUDDING 🤤)",
             "icon": "🍲"
         },
         {
             "id": "movie_nights",
             "label": "Movie Theater Dates",
             "value": "6",
-            "unit": "big screen experiences",
+            "unit": "big screen experiences ",
             "icon": "🎥"
         },
         {
             "id": "board_game_nights",
             "label": "Board Game Nights",
             "value": "6",
-            "unit": " 6 - 7 games played together",
+            "unit": " 6 - 7 games played together (SIH SEVENNN 🤷‍♂️ )",
             "icon": "🎲"
         },
         {
