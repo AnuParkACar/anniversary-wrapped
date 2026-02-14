@@ -1,5 +1,6 @@
 {
     "meta": {
+        "selfName": "Anu",
         "partnerName": "Anna",
         "years": 3,
         "startDate": "2023-02-14",
@@ -25,7 +26,7 @@
         },
         {
             "id": "netflix_sessions",
-            "label": "Netflix Sessions",
+            "label": "Netflix Episodes + Movies Watched",
             "value": "299",
             "unit": "cozy viewing sessions",
             "icon": "🎬"
@@ -75,22 +76,22 @@
         {
             "id": "hot_pot_dates",
             "label": "Hot Pot Dates",
-            "value": "5",
+            "value": "6",
             "unit": "cozy hotpot nights",
             "icon": "🍲"
         },
         {
             "id": "movie_nights",
             "label": "Movie Theater Dates",
-            "value": "3",
+            "value": "6",
             "unit": "big screen experiences",
             "icon": "🎥"
         },
         {
             "id": "board_game_nights",
-            "label": "Board Game Cafe Nights",
-            "value": "3",
-            "unit": "games played together",
+            "label": "Board Game Nights",
+            "value": "6",
+            "unit": " 6 - 7 games played together",
             "icon": "🎲"
         },
         {
@@ -99,45 +100,115 @@
             "value": "31",
             "unit": "Fri-Sun adventures",
             "icon": "💑"
+        },
+        {
+            "id": "most_ordered_item",
+            "label": "Most Ordered Item",
+            "value": "Matcha",
+            "unit": "our signature order 🍵",
+            "icon": "🍵"
         }
     ],
     "topMoments": [
         {
             "id": 1,
-            "title": "PLACEHOLDER: Moment 1",
-            "description": "PLACEHOLDER: Description",
-            "photo": "photos/moment1.jpg",
-            "date": "YYYY-MM-DD"
+            "title": "Calgary Trip",
+            "description": "This trip was one of the most spontaenous and fun things I've ever done with you. I loved being able to go bar hopping with you (and Ritika). Those shafts were the best and worst thing ever. Hanging out the next day with Juanita, Diego and Xavi at the beach at the expense of missing our bus was 10000% the right decision and 10000% fun. I look forward to doing more spontaneous things with you in the future!",
+            "photo": "photos/calgary_trip.jpg",
+            "date": "2025-06-14"
         },
         {
             "id": 2,
-            "title": "PLACEHOLDER: Moment 2",
-            "description": "PLACEHOLDER: Description",
-            "photo": "photos/moment2.jpg",
-            "date": "YYYY-MM-DD"
+            "title": "Water Lantern Festival",
+            "description": "The water latern festival was something I had been planning since we first got together, when you told me your favorite Princess movie is Tangled. I'm so happy we got to experience this together, and to make our little pieces of memories, to set out to the sea. I look forward to doing more special things like this with you!",
+            "photo": "photos/water_lantern.jpg",
+            "date": "2025-08-02"
         },
         {
             "id": 3,
-            "title": "PLACEHOLDER: Moment 3",
-            "description": "PLACEHOLDER: Description",
-            "photo": "photos/moment3.jpg",
-            "date": "YYYY-MM-DD"
+            "title": "Hot Pot Date Nights",
+            "description": "Going to hot pot has become one of my favorite things and special things to do with you. There's nothing like the taste of trying out the sauces you make (no matter how spicy I think they are), and trying out new foods that I would never check out on my own. You introduce to me new things each and everyday and I feel so grateful and excited at the thoughts of trying out new things with you for a long time to come!",
+            "photo": "photos/hot_pot_date.jpg",
+            "date": "2025-09-20"
         }
     ],
     "photos": [
-        "photos/photo1.jpg",
-        "photos/photo2.jpg",
-        "photos/photo3.jpg"
+        {
+            "id": 1,
+            "photo": "photos/photo_1.jpg",
+            "caption": "Nothing like self-care with you!"
+        },
+        {
+            "id": 2,
+            "photo": "photos/photo_2.jpg",
+            "caption": "Made by Marcus 🍦"
+        },
+        {
+            "id": 3,
+            "photo": "photos/photo_3.jpg",
+            "caption": "Very cool 😎"
+        },
+        {
+            "id": 4,
+            "photo": "photos/photo_4.jpg",
+            "caption": "Canada Day 2025 🇨🇦"
+        },
+        {
+            "id": 5,
+            "photo": "photos/photo_5.jpg",
+            "caption": "The eyes chico 👀"
+        },
+        {
+            "id": 6,
+            "photo": "photos/photo_6.jpg",
+            "caption": "Herrro 🇨🇳"
+        },
+        {
+            "id": 7,
+            "photo": "photos/photo_7.jpg",
+            "caption": "She was a fairy 🧚"
+        },
+        {
+            "id": 8,
+            "photo": "photos/photo_8.jpg",
+            "caption": "ANU PUT THAT PHONE DOWN RIGHT NOW 😠"
+        },
+        {
+            "id": 9,
+            "photo": "photos/photo_9.jpg",
+            "caption": "Cool math kids 🤓"
+        },
+        {
+            "id": 10,
+            "photo": "photos/photo_10.jpg",
+            "caption": "That's that me espresso ☕️🎵"
+        },
+        {
+            "id": 11,
+            "photo": "photos/photo_11.jpg",
+            "caption": "Just keep swimming, just keep swimming 🐠"
+        },
+        {
+            "id": 12,
+            "photo": "photos/photo_12.jpg",
+            "caption": "😍"
+        }
     ],
     "funFacts": [
-        "Our peak Netflix time is Sundays at 2 AM - night owls unite! 🦉",
-        "We ordered Uber Eats 47 times - that's almost once a week! 🛵",
+        "Our peak Netflix time is Sundays at 2 AM - Revenge Procratination FTW",
+        "We ordered Uber Eats 47 times - Gotta pump these numbers up for 2026! 🛵",
         "Tasty House is officially our spot - 9 visits and counting! ⭐",
         "Longest binge session: 13 episodes of Breaking Bad on Feb 16, 2025 - 9.6 hours! 🏆",
-        "We watched 66 different shows together - variety is the spice of life! 🎬",
-        "5 hot pot dates since July because nothing says love like sharing a boiling pot 🍲",
-        "Top 5 shows: Stranger Things, Breaking Bad, Dark, Big Mouth, Russian Doll 📺",
-        "31 weekend date outings - making the most of our Fri-Sun time together! 💑"
+        "We watched 66 different shows together - So thankful for the new media you introduced me to! 🎬",
+        "5 hot pot dates since July because nothing says love like unlimited food🍲",
+        "31 weekend date outings - Date nights with you are my favorite! 💑"
     ],
-    "outroMessage": "PLACEHOLDER: Your heartfelt closing message 💛"
+    "outroMessage": "This year was full of new experiences, new challenges, and new memories. I'm so glad and so grateful to have been able to go through all of these with you. I love you and I can't wait to see what the future holds for us! 💛",
+    "top_5_restaurants": [
+        "Tasty House (True Boss)",
+        "Chipotle",
+        "Chilli Hot Pot",
+        "Tim Hortons",
+        "Osmow's Shawarma"
+    ]
 }
