@@ -99,7 +99,7 @@
             "label": "Weekend Date Outings",
             "value": "31",
             "unit": "Fri-Sun adventures",
-            "icon": "💑"
+            "icon": "📅"
         },
         {
             "id": "most_ordered_item",
@@ -196,12 +196,12 @@
     ],
     "funFacts": [
         "Our peak Netflix time is Sundays at 2 AM - Revenge Procratination FTW",
-        "We ordered Uber Eats 47 times - Gotta pump these numbers up for 2026! 🛵",
-        "Tasty House is officially our spot - 9 visits and counting! ⭐",
-        "Longest binge session: 13 episodes of Breaking Bad on Feb 16, 2025 - 9.6 hours! 🏆",
-        "We watched 66 different shows together - So thankful for the new media you introduced me to! 🎬",
-        "5 hot pot dates since July because nothing says love like unlimited food🍲",
-        "31 weekend date outings - Date nights with you are my favorite! 💑"
+        "We ordered Uber Eats 47 times - Gotta pump these numbers up for 2026!",
+        "Tasty House is officially our spot - those chinese ladies love us!",
+        "Longest binge session: 13 episodes of Breaking Bad on Feb 16, 2025 - 9.6 hours!",
+        "We watched 66 different shows together - So thankful for the new media you showed me!",
+        "5 hot pot dates since July because nothing says love like unlimited food",
+        "31 weekend date outings - Date nights with you are my favorite!"
     ],
     "outroMessage": "This year was full of new experiences, new challenges, and new memories. I'm so glad and so grateful to have been able to go through all of these with you. I love you and I can't wait to see what the future holds for us! 💛",
     "top_5_restaurants": [
