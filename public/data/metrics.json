@@ -99,7 +99,7 @@
             "label": "Weekend Date Outings",
             "value": "31",
             "unit": "Fri-Sun adventures",
-            "icon": "💑"
+            "icon": "📅"
         },
         {
             "id": "most_ordered_item",

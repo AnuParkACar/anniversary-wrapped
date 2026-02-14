@@ -777,16 +777,15 @@ function setupAudio() {
       audio.play().then(() => {
         musicPlaying = true;
         updateUI(true);
-        // Remove listeners once successful
         document.removeEventListener('click', startAudio);
         document.removeEventListener('touchstart', startAudio);
         document.removeEventListener('keydown', startAudio);
       }).catch(() => { });
     };
 
-    document.addEventListener('click', startAudio, { once: true });
-    document.addEventListener('touchstart', startAudio, { once: true });
-    document.addEventListener('keydown', startAudio, { once: true });
+    document.addEventListener('click', startAudio);
+    document.addEventListener('touchstart', startAudio);
+    document.addEventListener('keydown', startAudio);
   });
 }
 
