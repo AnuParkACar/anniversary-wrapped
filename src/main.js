@@ -408,6 +408,7 @@ function stopMontageAutoExpand() {
   document.querySelectorAll('.montage-card.expanded').forEach(c => c.classList.remove('expanded'));
 }
 
+
 function createOutroSlide(data) {
   return `
     <div class="slide outro-slide" data-slide="outro">
@@ -420,6 +421,30 @@ function createOutroSlide(data) {
     </div>
   `;
 }
+
+// 12. Final Action Slide
+function createFinalActionSlide() {
+  return `
+    <div class="slide final-action-slide" data-slide="final">
+      <div class="slide-content">
+        <div class="final-actions">
+          <button class="action-btn replay-btn" onclick="handleReplay()">
+            🔄 Replay Our Year
+          </button>
+          <a href="https://github.com/AnuParkACar/anniversary-wrapped" target="_blank" class="action-btn docs-btn">
+            📚 View Documentation
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+window.handleReplay = function () {
+  // Reloading is the cleanest way to reset all interactive states (quiz, scratch cards, order, etc.)
+  location.reload();
+};
+
 
 // ============================================
 // Helper Functions
@@ -886,6 +911,9 @@ async function init() {
 
   // 11. Outro
   slidesHTML += createOutroSlide(data);
+
+  // 12. Final Actions
+  slidesHTML += createFinalActionSlide(data);
 
   // Inject slides
   app.innerHTML = `<div class="slides-container">${slidesHTML}</div>`;

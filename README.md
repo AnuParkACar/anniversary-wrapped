@@ -28,114 +28,91 @@ The app will open at `http://localhost:3000` 🎉
 
 ---
 
-## 📁 Project Structure
+## 🏗️ Architecture
 
-```
-Anniversary wrapped/
-├── index.html              # Entry point
-├── package.json            # Dependencies & scripts
-├── vite.config.js          # Build configuration
-├── public/
-│   ├── data/
-│   │   └── metrics.json    # ⚡ YOUR DATA GOES HERE
-│   ├── photos/             # 📷 YOUR PHOTOS GO HERE
-│   │   └── README.md
-│   └── music/              # 🎵 YOUR MUSIC GOES HERE
-│       └── README.md
-└── src/
-    ├── main.js             # App logic
-    └── styles/
-        └── main.css        # Styles & theme
-```
+The application is built with **Vanilla JavaScript** (no heavy frameworks) to ensure maximum performance and creativity.
 
----
+- **`index.html`**: The single-page entry point.
+- **`src/main.js`**:
+  - **Slide Generaton**: Functions like `createMetricSlide`, `createTopMomentsSlide`, etc., generate HTML strings based on data.
+  - **Navigation**: Handles swipe (touch), keyboard, and click navigation.
+  - **Animations**: Uses `IntersectionObserver` or simple timeouts to add `.animated` classes to elements when they enter the viewport.
+  - **Interactive State**: Manages state for the Quiz, Restaurant Ranking, Wordle, and Scratch Cards.
+- **`src/styles/main.css`**:
+  - **Snap Scrolling**: Uses CSS Scroll Snap for the main slide container.
+  - **Responsiveness**: Media queries ensure layouts adapt to mobile screens.
+  - **Animations**: CSS transitions and keyframes for all visual effects.
+- **`public/data/metrics.json`**: The single source of truth for all content.
 
-## ✏️ Customization
+### Data Customization (`metrics.json`)
 
-### 1. Add Your Photos
-
-Place your photos in `public/photos/`:
-
-| File | Purpose |
-|------|---------|
-| `moment1.jpg` | Top Moment #1 (expandable) |
-| `moment2.jpg` | Top Moment #2 (expandable) |
-| `moment3.jpg` | Top Moment #3 (expandable) |
-| `photo1.jpg` - `photo9.jpg` | Photo montage grid |
-
-**Tips:** 
-- Square or portrait photos work best
-- Compress to < 500KB each for fast loading
-
-### 2. Add Your Metrics
-
-Edit `public/data/metrics.json`:
+To personalize this app, you mainly need to edit `public/data/metrics.json`. Here is the template structure:
 
 ```json
 {
   "meta": {
-    "partnerName": "Your Partner's Name",
+    "partnerName": "Name",
     "years": 3,
-    "startDate": "2023-02-14"
+    "startDate": "YYYY-MM-DD",
+    "dataRange": {
+      "netflix": "Month YYYY - Month YYYY",
+      "banking": "Month YYYY - Month YYYY"
+    }
   },
   "metrics": [
     {
-      "id": "netflix",
-      "label": "Netflix Episodes Watched Together",
-      "value": "47",
-      "unit": "episodes",
-      "icon": "📺"
+      "id": "unique_id",
+      "label": "Title of the stat",
+      "value": "Number/Value",
+      "unit": "Description string",
+      "icon": "Emoji or Icon"
     }
-    // Add more metrics...
   ],
   "topMoments": [
     {
       "id": 1,
-      "title": "Our Trip to [Place]",
-      "description": "That time we...",
-      "photo": "photos/moment1.jpg",
-      "date": "2025-06-15"
+      "title": "Moment Title",
+      "description": "Longer text description.",
+      "photo": "photos/filename.jpg",
+      "date": "YYYY-MM-DD"
     }
-    // Add moments 2 and 3...
   ],
-  "outroMessage": "Your heartfelt closing message 💛"
+  "photos": [
+    {
+      "id": 1,
+      "photo": "photos/filename.jpg",
+      "caption": "Short caption"
+    }
+    // Add up to 12 photos for the montage
+  ],
+  "funFacts": [
+    "String 1",
+    "String 2"
+  ],
+  "quizShows": ["Option 1", "Option 2", "Option 3", "Option 4 (Correct)"],
+  "top_5_restaurants": ["#1 Place", "#2 Place", "#3 Place", "#4 Place", "#5 Place"],
+  "outroMessage": "Your final message here."
 }
 ```
 
-### 3. Add Background Music
+### Adding Photos
+1. Drop your images into `public/photos/`.
+2. Reference them in `metrics.json` using the path `photos/your-image.jpg`.
+3. **Note:** Vertical/Portrait images work best for the polaroid style!
 
-Place an MP3 file in `public/music/background.mp3`
+### 3. Configure Wordle
 
-**Free music sources:**
-- [Pixabay Music](https://pixabay.com/music/) - No attribution needed
-- [Free Music Archive](https://freemusicarchive.org/)
+The Wordle game is embedded via an iframe pointing to a custom instance of [Vue Wordle](https://github.com/yyx990803/vue-wordle).
 
----
+**To change the target word:**
+1.  Open `src/main.js` and find the `createWordleSlide` function.
+2.  Locate the iframe `src` URL: `https://vue-wordle.netlify.app/?c3VzaGk=`
+3.  The parameter after `?` is the **Base64 encoded** target word.
+    -   **Requirement**: The word must be exactly **5 letters** long.
+    -   **Encoding**: use `btoa('yourword')` in the console or an online Base64 encoder.
+    -   *Example*: `btoa('sushi')` -> `c3VzaGk=`
+4.  **Fallback**: If no word is provided or the length is incorrect, it defaults to the "Word of the Day".
 
-## 🎨 Theme Customization
-
-Edit `src/styles/main.css` to change colors:
-
-```css
-:root {
-  --yellow-bright: #FFD700;  /* Main accent color */
-  --bg-dark: #1A1A2E;        /* Background */
-  /* ... more variables */
-}
-```
-
----
-
-## 📱 Features
-
-- ✅ **Mobile-first** - Designed for phone viewing via QR code
-- ✅ **Swipe navigation** - Swipe left/right or tap to advance
-- ✅ **Expandable moments** - Tap "Click me" to expand top moments
-- ✅ **Background music** - With mute toggle
-- ✅ **Smooth animations** - Spotify Wrapped-style transitions
-- ✅ **Keyboard support** - Arrow keys and spacebar
-
----
 
 ## 🚀 Deployment
 

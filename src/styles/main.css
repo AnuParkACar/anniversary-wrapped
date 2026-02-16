@@ -1635,7 +1635,61 @@ body {
   background: transparent;
 }
 
+
 .fun-facts-list::-webkit-scrollbar-thumb {
   background: var(--yellow-accent);
   border-radius: 4px;
+}
+
+/* ========================================
+   Final Action Slide
+   ======================================== */
+.final-action-slide .slide-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.final-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px;
+  border-radius: 50px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+.replay-btn {
+  background: var(--yellow-bright);
+  color: var(--bg-dark);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.docs-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
